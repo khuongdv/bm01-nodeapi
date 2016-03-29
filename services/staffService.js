@@ -50,29 +50,6 @@ function init($app, $router, $mongoose, $encryptUtil){
 	
 }
 
-// Check if login info is correct
-function doLogin(staffCode, pass){
-	if(isEmpty(staffCode) || isEmpty(pass)){
-		return {
-			'Status':false,
-			'Message': 'Username or password is empty'
-		}
-	}
-	var md5Pass = encryptUtil.getMD5Hash(pass);
-	console.log("MD5 of input password: " + md5Pass);
-	var $staff = {};
-	$staff = StaffModel.findOne({'code':staffCode, 'password':md5Pass},
-						'name code status birth date_start',
-						function(err,staff){
-							console.log("Staff: " + staff);
-							if(err)
-								return err;
-							else
-								return staff;
-						}
-	);
-	return $staff;
-}
 // Check if value is empty
 function isEmpty(value){
 	if(value == undefined || value == null || value == '' || value.trim() == '')
