@@ -6,3 +6,5 @@ Entities: Category, Book, Promotion, Customer, Order, Staff
 All methods in the API will be secured with SHA encryption algorithm.
 
 DB used: MongoDB
+
+Read more at [**my blog**](https://khuongdv.wordpress.com "Jump into Javascript World")
