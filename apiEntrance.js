@@ -28,7 +28,7 @@ staffService.init(app,router,mongoose,encryptUtils);
 
 app.all('*',function(req,res,next){	 
 	if (req.url === '/' || req.url === '/api/login') return next();
-    if(isAuthenticated(req)){
+    if(encryptUtils.isAuthenticated(req)){
         next();
     }else{
         next("Error: 401 - Not Authorized"); // 401 Not Authorized
@@ -38,18 +38,3 @@ app.use('/api', router);
 // START THE SERVER
 app.listen(SERVER_PORT);
 console.log('Book management starting at port ' + SERVER_PORT);
-
-
-//--- Check if request has valid token
-function isAuthenticated(req){
-	var token = req.get('token');
-	if(token == undefined || token == null) {
-		return false;
-	}
-	var extractedData = encryptUtils.decryptToken(token);
-	console.log(extractedData);
-	if(typeof(extractedData) == "object" && extractedData.Status == true){
-		return true;
-	}
-	return false;
-}
