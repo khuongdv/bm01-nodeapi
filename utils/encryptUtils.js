@@ -55,8 +55,22 @@ function decryptToken(token){
 		}
 	}
 }
+//--- Check if request has valid token
+function isAuthenticated(req){
+	var token = req.get('token');
+	if(token == undefined || token == null) {
+		return false;
+	}
+	var extractedData = decryptToken(token);
+	console.log(extractedData);
+	if(typeof(extractedData) == "object" && extractedData.Status == true){
+		return true;
+	}
+	return false;
+}
 
 // Exports
 exports.getMD5Hash = getMD5Hash;
 exports.generateToken = generateToken;
 exports.decryptToken = decryptToken;
+exports.isAuthenticated = isAuthenticated;
