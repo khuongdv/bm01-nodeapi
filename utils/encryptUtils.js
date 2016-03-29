@@ -20,7 +20,7 @@ function generateToken(staffCode){
 		 crypto = require('crypto');
 	}
 	var algorithm = 'aes256';	
-	var text = "{'staffCode':'" +staffCode +"','loginat'='"+new Date().getTime() + "'}";
+	var text = '{"staffCode":"' +staffCode +'","loginat":"'+new Date().getTime() + '"}';
 	var cipher = crypto.createCipher(algorithm, SHA_SEED);
 	var token = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
 	return token;
@@ -33,14 +33,19 @@ function decryptToken(token){
 		 crypto = require('crypto');
 	}
 	var algorithm = 'aes256';		
-	var decipher = crypto.createDecipher(algorithm, key);
+	var decipher = crypto.createDecipher(algorithm, SHA_SEED);
+	console.log("Token = " + token);
 	var decryptedText = decipher.update(token, 'hex', 'utf8') + decipher.final('utf8');
+	console.log("Decrypted text: " + decryptedText + "; type = " + typeof(decryptedText));
 	try{
 		var loginObject = JSON.parse(decryptedText);
+		console.log("Login object: "  + loginObject);
 		if(loginObject.staffCode != undefined && loginObject.staffCode != null){
+			loginObject.Status = true;
 			return loginObject;
 		}
 		else{
+			console.log("Fake data");
 			throw 1;
 		}
 	}catch(e){
