@@ -135,7 +135,8 @@ function saveNewCategory (req){
 	cate.save(function(err) {
 		if (err)
 			defer.reject(err);
-		defer.resolve({ message: 'Category ' + req.body.name + ' created!', Status: true });
+		else 
+		        defer.resolve({ message: 'Category ' + req.body.name + ' created!', Status: true });
 	});
 	return defer.promise;
 }
