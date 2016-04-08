@@ -2,20 +2,16 @@ var mongoose;
 var app,router;
 var Schema, CateSchema, Category;
 var Q = require("q");
+var MongoModel = require("../utils/mongoModels.js");
 
-exports.init = function(app,router,mongoose){
+module.exports.init = function(app,router,mongoose){
 	console.log("[CategoryService] - Initialization");
 	this.app = app;
 	this.router = router;
 	this.mongoose = mongoose;
 	Schema = mongoose.Schema;
-	CateSchema = new Schema({
-		"name": String,
-		"code": String,
-		"update_datetime": Date,
-		"status": String
-	},{ collection : 'category' });	
-	Category = mongoose.model('CateSchema', CateSchema);
+    CateSchema = MongoModel.getSchema(Schema, "Category");
+	Category = MongoModel.getModel(mongoose, CateSchema, 'CategorySchema');
 	
 	router.get('/cate/list', function(req, res) {
 		console.log("[CategoryService] - List out all categories");
@@ -127,16 +123,15 @@ function updateCategory(req){
  * @author KhuongDV
  *
  */
-function saveNewCategory (req){
-	
+function saveNewCategory (req){	
 	var defer = Q.defer();		
 	var cate = new Category(req.body.data);	
 	cate.update_datetime = new Date();	
 	cate.save(function(err) {
 		if (err)
 			defer.reject(err);
-		else 
-		        defer.resolve({ message: 'Category ' + req.body.name + ' created!', Status: true });
+		else
+			defer.resolve({ message: 'Category ' + req.body.name + ' created!', Status: true });
 	});
 	return defer.promise;
 }
